@@ -10,10 +10,9 @@ import PeopleScreen from '../screens/people/peopleScreen';
 
 const Tab = createMaterialTopTabNavigator();
 
-// Swap these require() paths once you download the tab icons from the course doc
-const restaurantsIcon = require('../assets/icon.png');
-const decisionIcon = require('../assets/icon.png');
-const peopleIcon = require('../assets/icon.png');
+const restaurantsIcon = require('../assets/icon-restaurants.png');
+const decisionIcon = require('../assets/icon-decision.png');
+const peopleIcon = require('../assets/icon-people.png');
 
 const Navigation = () => {
   return (
