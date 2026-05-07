@@ -12,9 +12,11 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.sidimohamedeleyil.restaurantchooser"
     },
     "android": {
+      "package": "com.sidimohamedeleyil.restaurantchooser",
       "adaptiveIcon": {
         "backgroundColor": "#E6F4FE",
         "foregroundImage": "./assets/android-icon-foreground.png",
@@ -29,6 +31,12 @@
         "resizeMode": "contain",
         "backgroundColor": "#ffffff"
       }
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "b5af6781-e375-4ca9-be93-ef5c9021c7e9"
+      }
+    },
+    "owner": "kalibsm"
   }
 }
