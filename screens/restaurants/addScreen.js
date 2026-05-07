@@ -69,6 +69,7 @@ const AddScreen = ({ navigation }) => {
   const pickerStyle = Platform.select({
     ios: styles.pickerIOS,
     android: styles.pickerAndroid,
+    default: styles.pickerAndroid,
   });
 
   return (

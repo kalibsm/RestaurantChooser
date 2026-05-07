@@ -5,7 +5,7 @@ import { createMaterialTopTabNavigator } from '@react-navigation/material-top-ta
 import { StatusBar } from 'expo-status-bar';
 import Constants from 'expo-constants';
 import RestaurantsScreen from '../screens/restaurants/restaurantsScreen';
-import DecisionScreen from '../screens/decision/decisionScreen';
+import DecisionScreenNavigation from '../screens/decision/decisionScreenNavigation';
 import PeopleScreen from '../screens/people/peopleScreen';
 
 const Tab = createMaterialTopTabNavigator();
@@ -46,7 +46,7 @@ const Navigation = () => {
           })}
         >
           <Tab.Screen name="Restaurants" component={RestaurantsScreen} />
-          <Tab.Screen name="Decision" component={DecisionScreen} />
+          <Tab.Screen name="Decision" component={DecisionScreenNavigation} />
           <Tab.Screen name="People" component={PeopleScreen} />
         </Tab.Navigator>
       </SafeAreaView>
