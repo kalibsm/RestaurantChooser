@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import Checkbox from 'expo-checkbox';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Toast from 'react-native-toast-message';
 import CustomButton from '../../components/customButton';
 
 const WhosGoingScreen = ({ navigation }) => {
@@ -24,7 +25,12 @@ const WhosGoingScreen = ({ navigation }) => {
         setPeople(list);
         setSelected(Array(list.length).fill(false));
       } catch (e) {
-        Alert.alert('Error', 'Could not load people.');
+        Toast.show({
+          type: 'error',
+          text1: 'Error',
+          text2: 'Could not load people. Please try again.',
+          visibilityTime: 3000,
+        });
       }
     };
     loadPeople();
@@ -54,9 +60,21 @@ const WhosGoingScreen = ({ navigation }) => {
       .filter(Boolean);
 
     if (selectedParticipants.length === 0) {
-      Alert.alert('No one selected', 'Please select at least one person.');
+      Toast.show({
+        type: 'error',
+        text1: 'No one selected',
+        text2: 'Tap at least one person before continuing.',
+        visibilityTime: 3000,
+      });
       return;
     }
+
+    Toast.show({
+      type: 'success',
+      text1: `${selectedParticipants.length} ${selectedParticipants.length === 1 ? 'person' : 'people'} selected`,
+      text2: 'Now set your filters!',
+      visibilityTime: 1500,
+    });
 
     navigation.navigate('PreFiltersScreen', { participants: selectedParticipants });
   };

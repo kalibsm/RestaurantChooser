@@ -7,9 +7,9 @@ import {
   ScrollView,
   TouchableOpacity,
   StyleSheet,
-  Alert,
 } from 'react-native';
 import { useRoute } from '@react-navigation/native';
+import Toast from 'react-native-toast-message';
 import CustomButton from '../../components/customButton';
 
 const getRandom = (min, max) => {
@@ -30,7 +30,12 @@ const ChoiceScreen = ({ navigation }) => {
 
   const selectRandomRestaurant = () => {
     if (restaurants.length === 0) {
-      Alert.alert('No restaurants', 'No restaurants left to choose from.');
+      Toast.show({
+        type: 'error',
+        text1: 'No restaurants left',
+        text2: 'All options have been vetoed. Starting over!',
+        visibilityTime: 3000,
+      });
       return;
     }
     const pick = restaurants[getRandom(0, restaurants.length - 1)];
@@ -60,18 +65,43 @@ const ChoiceScreen = ({ navigation }) => {
     setRestaurants(updatedRestaurants);
     setVetoVisible(false);
 
+    Toast.show({
+      type: 'info',
+      text1: `${person.firstName} vetoed it!`,
+      text2: updatedRestaurants.length > 0
+        ? `${updatedRestaurants.length} ${updatedRestaurants.length === 1 ? 'restaurant' : 'restaurants'} remaining.`
+        : 'No restaurants left.',
+      visibilityTime: 2500,
+    });
+
     const stillCanVeto = updatedParticipants.some((p) => p.vetoed === 'no');
     if (!stillCanVeto) {
       setVetoText('No vetoes left');
       setVetoDisabled(true);
+      Toast.show({
+        type: 'info',
+        text1: 'All vetoes used',
+        text2: 'Everyone has used their veto.',
+        visibilityTime: 2500,
+      });
     }
 
     if (updatedRestaurants.length === 0) {
-      Alert.alert('Game over', 'No restaurants left.', [
-        { text: 'OK', onPress: () => navigation.navigate('DecisionTimeScreen') },
-      ]);
+      Toast.show({
+        type: 'error',
+        text1: 'Game over!',
+        text2: 'All restaurants were vetoed. Going back to start.',
+        visibilityTime: 3000,
+      });
+      setTimeout(() => navigation.navigate('DecisionTimeScreen'), 3000);
     } else if (updatedRestaurants.length === 1) {
-      navigation.navigate('PostChoiceScreen', { chosenRestaurant: updatedRestaurants[0] });
+      Toast.show({
+        type: 'success',
+        text1: 'Only one left!',
+        text2: `Going with ${updatedRestaurants[0].name}.`,
+        visibilityTime: 2000,
+      });
+      setTimeout(() => navigation.navigate('PostChoiceScreen', { chosenRestaurant: updatedRestaurants[0] }), 2000);
     }
     // else: user taps "Randomly Choose" again
   };

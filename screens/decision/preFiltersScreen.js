@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { View, Text, ScrollView, StyleSheet, Platform, Alert } from 'react-native';
+import { View, Text, ScrollView, StyleSheet, Platform } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { useRoute } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Toast from 'react-native-toast-message';
 import CustomButton from '../../components/customButton';
 
 const PreFiltersScreen = ({ navigation }) => {
@@ -28,13 +29,43 @@ const PreFiltersScreen = ({ navigation }) => {
       });
 
       if (filteredRestaurants.length === 0) {
-        Alert.alert('No matches', 'No restaurants match the selected criteria.');
+        // Pinpoint which filter is responsible so the user knows what to relax
+        let reason = 'Try relaxing some of your filters.';
+
+        if (cuisine && parsedRestaurants.filter((r) => r.cuisine === cuisine).length === 0) {
+          reason = `You have no ${cuisine} restaurants in your list.`;
+        } else if (price && parsedRestaurants.filter((r) => Number(r.price) <= Number(price)).length === 0) {
+          reason = `No restaurants are priced at ${'$'.repeat(Number(price))} or less.`;
+        } else if (rating && parsedRestaurants.filter((r) => Number(r.rating) >= Number(rating)).length === 0) {
+          reason = `No restaurants are rated ${rating}${Number(rating) === 1 ? ' star' : ' stars'} or more.`;
+        } else if (delivery && parsedRestaurants.filter((r) => r.delivery === delivery).length === 0) {
+          reason = `No restaurants ${delivery === 'Yes' ? 'offer' : 'without'} delivery.`;
+        }
+
+        Toast.show({
+          type: 'error',
+          text1: 'No restaurants found',
+          text2: reason,
+          visibilityTime: 4000,
+        });
         return;
       }
 
+      Toast.show({
+        type: 'success',
+        text1: `${filteredRestaurants.length} ${filteredRestaurants.length === 1 ? 'restaurant' : 'restaurants'} found!`,
+        text2: "Let's pick one!",
+        visibilityTime: 1500,
+      });
+
       navigation.navigate('ChoiceScreen', { participants, restaurants: filteredRestaurants });
     } catch (e) {
-      Alert.alert('Error', 'Could not load restaurants.');
+      Toast.show({
+        type: 'error',
+        text1: 'Something went wrong',
+        text2: 'Could not load restaurants. Please try again.',
+        visibilityTime: 3000,
+      });
     }
   };
 

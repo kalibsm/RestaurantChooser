@@ -1,11 +1,21 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View, Text, ScrollView, StyleSheet } from 'react-native';
 import { useRoute } from '@react-navigation/native';
+import Toast from 'react-native-toast-message';
 import CustomButton from '../../components/customButton';
 
 const PostChoiceScreen = ({ navigation }) => {
   const route = useRoute();
   const { chosenRestaurant } = route.params;
+
+  useEffect(() => {
+    Toast.show({
+      type: 'success',
+      text1: `You're going to ${chosenRestaurant.name}!`,
+      text2: 'Enjoy your meal!',
+      visibilityTime: 3000,
+    });
+  }, []);
 
   return (
     <ScrollView style={styles.container}>

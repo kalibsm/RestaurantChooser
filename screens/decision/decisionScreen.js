@@ -1,6 +1,7 @@
 import React from 'react';
-import { TouchableOpacity, Image, Platform, StyleSheet, Alert } from 'react-native';
+import { TouchableOpacity, Image, Platform, StyleSheet } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Toast from 'react-native-toast-message';
 
 const foodImage = Platform.select({
   android: require('../../assets/its-decision-time.android.png'),
@@ -18,17 +19,32 @@ const DecisionTimeScreen = ({ navigation }) => {
       const restaurants = restaurantsRaw ? JSON.parse(restaurantsRaw) : [];
 
       if (people.length === 0) {
-        Alert.alert("That ain't gonna work, chief", 'Add some people first.');
+        Toast.show({
+          type: 'error',
+          text1: 'No people yet!',
+          text2: 'Go to the People tab and add someone first.',
+          visibilityTime: 3000,
+        });
         return;
       }
       if (restaurants.length === 0) {
-        Alert.alert("That ain't gonna work, chief", 'Add some restaurants first.');
+        Toast.show({
+          type: 'error',
+          text1: 'No restaurants yet!',
+          text2: 'Go to the Restaurants tab and add one first.',
+          visibilityTime: 3000,
+        });
         return;
       }
 
       navigation.navigate('WhosGoingScreen');
     } catch (e) {
-      Alert.alert('Error', 'Could not load data. Try again.');
+      Toast.show({
+        type: 'error',
+        text1: 'Something went wrong',
+        text2: 'Could not load data. Please try again.',
+        visibilityTime: 3000,
+      });
     }
   };
 
