@@ -6,12 +6,11 @@ export const validateName = (name) => {
   return null;
 };
 
-export const validatePhone = (phone) => {
+export const validatePhone = (phone, expectedDigits) => {
   if (!phone || phone.trim().length === 0) return 'Phone is required';
   const digits = phone.replace(/\D/g, '');
-  if (digits.length < 10) return 'Phone must have at least 10 digits';
-  if (digits.length > 15) return 'Phone number is too long';
-  if (/[a-zA-Z]/.test(phone)) return 'Phone cannot contain letters';
+  if (digits.length !== expectedDigits)
+    return `Phone must be exactly ${expectedDigits} digits`;
   return null;
 };
 

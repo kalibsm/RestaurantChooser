@@ -67,7 +67,7 @@ const AddScreen = ({ navigation }) => {
       <CustomTextInput
         label="First Name"
         value={fields.firstName}
-        onChangeText={(v) => setField('firstName', v)}
+        onChangeText={(v) => setField('firstName', v.replace(/[^a-zA-Z\s'-]/g, ''))}
         maxLength={50}
         error={fields.errors.firstName}
       />
@@ -75,7 +75,7 @@ const AddScreen = ({ navigation }) => {
       <CustomTextInput
         label="Last Name"
         value={fields.lastName}
-        onChangeText={(v) => setField('lastName', v)}
+        onChangeText={(v) => setField('lastName', v.replace(/[^a-zA-Z\s'-]/g, ''))}
         maxLength={50}
         error={fields.errors.lastName}
       />

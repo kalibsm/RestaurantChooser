@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, FlatList, StyleSheet, Alert, TouchableOpacity } from 'react-native';
+import { View, Text, FlatList, StyleSheet, Alert, TouchableOpacity, Platform } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Toast from 'react-native-toast-message';
 import CustomButton from '../../components/customButton';
@@ -22,28 +22,28 @@ const ListScreen = ({ navigation }) => {
     }
   };
 
+  const performDelete = async (key) => {
+    try {
+      const updated = restaurants.filter((r) => r.key !== key);
+      await AsyncStorage.setItem('restaurants', JSON.stringify(updated));
+      setRestaurants(updated);
+      Toast.show({ type: 'error', text1: 'Restaurant deleted', visibilityTime: 2000 });
+    } catch (e) {
+      console.error('Error deleting restaurant:', e);
+    }
+  };
+
   const deleteRestaurant = (key) => {
-    Alert.alert('Delete Restaurant', 'Are you sure?', [
-      { text: 'Cancel', style: 'cancel' },
-      {
-        text: 'Yes',
-        style: 'destructive',
-        onPress: async () => {
-          try {
-            const updated = restaurants.filter((r) => r.key !== key);
-            await AsyncStorage.setItem('restaurants', JSON.stringify(updated));
-            setRestaurants(updated);
-            Toast.show({
-              type: 'error',
-              text1: 'Restaurant deleted',
-              visibilityTime: 2000,
-            });
-          } catch (e) {
-            console.error('Error deleting restaurant:', e);
-          }
-        },
-      },
-    ]);
+    if (Platform.OS === 'web') {
+      if (window.confirm('Delete Restaurant — Are you sure?')) {
+        performDelete(key);
+      }
+    } else {
+      Alert.alert('Delete Restaurant', 'Are you sure?', [
+        { text: 'Cancel', style: 'cancel' },
+        { text: 'Yes', style: 'destructive', onPress: () => performDelete(key) },
+      ]);
+    }
   };
 
   const renderItem = ({ item }) => (
